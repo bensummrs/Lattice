@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f4ef" />
+    <meta
+      name="description"
+      content="A little space for big ideas. Draw pixels, shape your own icons, and export beautiful glyphs."
+    />
+    <title>Lattice — a little icon studio</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d4f57a'/%3E%3Cpath d='M8 8h6v10h10v6H8z' fill='%23282b25'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="./" aria-label="Lattice home"
+        ><span class="brand-mark">▦</span> lattice</a
+      >
+      <span class="tagline">A little space for big ideas.</span>
+      <button id="help-button" class="quiet">
+        How it works <span class="key">?</span>
+      </button>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">YOUR VERY OWN ICON STUDIO</div>
+          <h1>Small squares. Endless possibilities.</h1>
+        </div>
+        <span class="local-badge"><i></i> Made here. Saved here.</span>
+      </div>
+      <section class="studio" aria-label="Icon editor">
+        <aside class="controls">
+          <div class="section-heading">Make your mark <span>01</span></div>
+          <div class="tool-grid" role="group" aria-label="Drawing tool">
+            <button data-tool="draw" aria-pressed="true">
+              <span>✎</span> Draw <kbd>B</kbd>
+            </button>
+            <button data-tool="erase" aria-pressed="false">
+              <span>▱</span> Erase <kbd>E</kbd>
+            </button>
+            <button data-tool="fill" aria-pressed="false">
+              <span>◩</span> Fill <kbd>F</kbd>
+            </button>
+            <button data-tool="line" aria-pressed="false">
+              <span>╱</span> Line <kbd>L</kbd>
+            </button>
+          </div>
+          <label class="field-label" for="size"
+            >Grid size <span>Room to create</span></label
+          >
+          <select id="size">
+            <option value="8">8 × 8 — keep it simple</option>
+            <option value="16" selected>16 × 16 — just right</option>
+            <option value="24">24 × 24 — more detail</option>
+            <option value="32">32 × 32 — go big</option>
+          </select>
+          <label class="field-label" for="symmetry"
+            >Mirror drawing <span>Instant balance</span></label
+          >
+          <select id="symmetry">
+            <option value="none">Off</option>
+            <option value="horizontal">Left + right</option>
+            <option value="vertical">Top + bottom</option>
+            <option value="both">Both directions</option>
+          </select>
+          <div class="divider"></div>
+          <div class="section-heading">Give it character <span>02</span></div>
+          <label class="field-label" for="roundness"
+            >Roundness <output id="roundness-value">0%</output></label
+          >
+          <input id="roundness" type="range" min="0" max="100" value="0" />
+          <div class="range-hints"><span>Square</span><span>Soft</span></div>
+          <label class="field-label" for="gap"
+            >Pixel spacing <output id="gap-value">0%</output></label
+          >
+          <input id="gap" type="range" min="0" max="60" value="0" />
+          <div class="range-hints">
+            <span>Connected</span><span>Separated</span>
+          </div>
+          <label class="field-label" for="color"
+            >Ink color <output id="color-value">#292D27</output></label
+          >
+          <div class="palette" id="palette"></div>
+          <div class="divider"></div>
+          <div class="transform-row">
+            <button id="rotate" title="Rotate 90° clockwise">
+              ↻ <span>Rotate</span></button
+            ><button id="flip" title="Flip left to right">
+              ⇆ <span>Flip</span></button
+            ><button id="clear" title="Clear drawing (can be undone)">
+              ⌫ <span>Clear</span>
+            </button>
+          </div>
+          <p class="control-note">No wrong turns. You can always undo.</p>
+        </aside>
+        <div class="workspace">
+          <div class="canvas-toolbar">
+            <div class="document-name">
+              <input
+                id="name"
+                aria-label="Icon name"
+                value="Untitled icon"
+                maxlength="60"
+              /><span>✎</span>
+            </div>
+            <div class="history">
+              <button
+                id="undo"
+                aria-label="Undo"
+                title="Undo (Ctrl/⌘ Z)"
+                disabled
+              >
+                ↶</button
+              ><button
+                id="redo"
+                aria-label="Redo"
+                title="Redo (Ctrl/⌘ Shift Z)"
+                disabled
+              >
+                ↷</button
+              ><span class="toolbar-separator"></span
+              ><button
+                id="grid"
+                aria-label="Show grid"
+                aria-pressed="true"
+                title="Toggle grid"
+              >
+                ▦
+              </button>
+            </div>
+          </div>
+          <div class="board-area">
+            <div class="board-wrap">
+              <canvas
+                id="board"
+                tabindex="0"
+                role="img"
+                aria-label="Drawing grid. Use arrow keys to move, Space to paint, Delete to erase."
+                aria-describedby="drawing-tip"
+              ></canvas>
+            </div>
+          </div>
+          <div class="canvas-footer">
+            <span id="pixel-count">0 pixels placed</span
+            ><span id="drawing-tip"
+              >Click to place · drag to draw · right-click to erase</span
+            ><span id="dimensions">16 × 16</span>
+          </div>
+        </div>
+        <aside class="preview-panel">
+          <div class="section-heading">The bigger picture <span>03</span></div>
+          <div id="preview" class="preview-card"></div>
+          <div class="preview-label">LIVE PREVIEW <span>↗</span></div>
+          <div class="size-previews" id="size-previews"></div>
+          <div class="divider"></div>
+          <div class="section-heading export-heading">Out into the world</div>
+          <p class="export-description">
+            From a small idea to your next big thing. Take your icon with you.
+          </p>
+          <label class="check-row"
+            ><input id="transparent" type="checkbox" checked /> Transparent
+            background</label
+          >
+          <button id="export-svg" class="primary">
+            Download SVG <span>↗</span>
+          </button>
+          <button id="export-png" class="secondary">
+            Download PNG <span>↓</span>
+          </button>
+          <p class="export-note">SVG scales beautifully. PNG is 1024 × 1024.</p>
+          <div class="project-actions">
+            <button id="save-project">Save editable file</button
+            ><button id="open-project">Open file</button
+            ><input
+              id="file"
+              type="file"
+              accept=".json,application/json"
+              hidden
+            />
+          </div>
+        </aside>
+      </section>
+      <section class="starter-section" aria-label="Starter icons">
+        <div class="starter-intro">
+          <div class="eyebrow">A LITTLE NUDGE</div>
+          <h2>Start somewhere.</h2>
+          <p>Pick a shape. Make it yours.</p>
+        </div>
+        <div id="starters" class="starters"></div>
+      </section>
+      <footer>
+        <span>Built for your taste. No design degree required.</span
+        ><span
+          >Inspired by
+          <a
+            href="https://glyph.kateander.com/"
+            target="_blank"
+            rel="noreferrer"
+            >GLYPH by Kate Ander ↗</a
+          ></span
+        >
+      </footer>
+    </main>
+    <div id="status" role="status" aria-live="polite"></div>
+    <dialog id="help">
+      <button id="close-help" class="dialog-close" aria-label="Close help">
+        ×
+      </button>
+      <div class="eyebrow">SMALL SQUARES, BIG IDEAS</div>
+      <h2>Meet your little icon studio.</h2>
+      <p>
+        Click an empty square to add ink. Click an inked square to remove it.
+        Drag to draw a continuous stroke.
+      </p>
+      <p>
+        <b>Make it yours.</b> Try mirror drawing for balanced logos, soften the
+        corners, or add a little space between pixels.
+      </p>
+      <p>
+        <b>Experiment freely.</b> Undo works on drawing, styles, grid changes,
+        and starter shapes. Changing the grid keeps your design centered; a
+        smaller grid crops the edges.
+      </p>
+      <p>
+        <b>Keep your work.</b> Your latest design saves in this browser. Save an
+        editable file to keep multiple designs or move them to another device.
+      </p>
+      <div class="shortcut-list">
+        <span>Draw / Erase / Fill / Line</span><kbd>B / E / F / L</kbd
+        ><span>Undo / Redo</span><kbd>Ctrl/⌘ Z / Shift Z</kbd
+        ><span>Move on grid / Paint</span><kbd>Arrows / Space</kbd>
+      </div>
+    </dialog>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
