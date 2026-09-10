@@ -4,6 +4,8 @@ A small, local-first pixel icon studio inspired by [GLYPH by Kate Ander](https:/
 
 ## Run locally
 
+For a simple walkthrough with Codex or Claude Code, see [QUICKSTART.md](QUICKSTART.md).
+
 Requires Node.js 20.19+ or 22.12+.
 
 ```sh
