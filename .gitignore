@@ -1,2 +1,4 @@
 node_modules/
 dist/
+glyphs/*.png
+glyphs/*.svg

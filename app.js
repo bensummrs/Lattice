@@ -104,3 +104,11 @@ bindEditorControls(controls);
 bindFileControls(controls);
 bindHelpAndShortcuts(controls);
 renderEditor(editor, canvasEditor);
+
+if (import.meta.env.DEV) {
+  $("local-file").hidden = false;
+  if (new URLSearchParams(location.search).has("local")) {
+    const { connectLocalFile } = await import("./local-sync.js");
+    connectLocalFile({ editor, canvasEditor, notify });
+  }
+}
