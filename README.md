@@ -25,3 +25,15 @@ Open the local URL printed by Vite. `npm test` checks drawing, transforms, impor
 - The current drawing saves in this browser's local storage after edits. Save/open editable JSON files to keep multiple designs or move between browsers. Imported files are validated before replacing the drawing; opening a file is undoable.
 
 The app requests Google Fonts for typography, falling back to system sans-serif when unavailable. Drawing data stays on the device. Nothing is published by running or building the app.
+
+## Code structure
+
+- `app.js` composes the modules and coordinates cross-module workflows.
+- `canvas-editor.js` owns canvas rendering and pointer/keyboard drawing gestures.
+- `editor-controls.js` binds toolbar, file, help, and keyboard actions.
+- `editor-state.js` owns the current design and undo/redo history.
+- `editor-view.js` renders the surrounding UI and builds dynamic controls.
+- `design-io.js` owns browser storage, editable files, and image downloads.
+- `drawing.js` contains the DOM-free drawing, validation, and SVG rules.
+
+Keep drawing rules in `drawing.js` so they remain independently testable. Browser-specific behavior belongs in the module that owns that browser boundary; `app.js` should remain orchestration rather than accumulating implementation details.
